@@ -11,18 +11,21 @@ import 'package:location/location.dart';
 
 class MapasController extends GetxController {
   var markerlist = <Marker>[].obs;
+  Rx<BitmapDescriptor?> icono = Rx<BitmapDescriptor?>(null);
   Rx<Position?> position = Rx<Position?>(null);
   Rx<StreamSubscription<Position>?> positionStream =
       Rx<StreamSubscription<Position>?>(null);
 
   @override
   void onInit() async {
+    icono.value = await convertIconFromAsset("assets/taxi.png");
     await Geolocator.requestPermission();
 
     position.value = await Geolocator.getCurrentPosition();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      updateLocation();
-    });
+
+    checkGps();
+    updateLocation();
+
     super.onInit();
   }
 
@@ -30,12 +33,12 @@ class MapasController extends GetxController {
     markerlist.add(marker);
   }
 
-  addMarkerToMap(LatLng latLng, String id) async {
+  addMarkerToMap(LatLng latLng, String id) {
     markerlist.add(
       Marker(
         markerId: MarkerId(id),
         position: latLng,
-        icon: await convertIconFromAsset("assets/taxi.png"),
+        icon: icono.value!,
         infoWindow:
             const InfoWindow(title: "Taxi", snippet: "Chofe pare el Taxi"),
         draggable: false,
@@ -102,10 +105,8 @@ class MapasController extends GetxController {
         ),
       ).listen((Position position) {
         this.position.value = position;
+        addMarkerToMap(LatLng(position.latitude, position.longitude), "1");
       });
-
-      await addMarkerToMap(
-          LatLng(position.value!.latitude, position.value!.longitude), "1");
     } on Exception catch (e) {
       print(e);
     }
