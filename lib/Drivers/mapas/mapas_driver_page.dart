@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:urbe_taxis/pages/mapas/mapas_controller.dart';
+import 'package:urbe_taxis/Drivers/mapas/mapas_driver_controller.dart';
 
-class MapasPage extends StatelessWidget {
-  const MapasPage({Key? key}) : super(key: key);
+class MapasDriverPage extends StatelessWidget {
+  const MapasDriverPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    MapasController controller = Get.find();
+    MapasDriverController controller = Get.find();
     return Obx(() => SafeArea(
           child: GoogleMap(
             zoomControlsEnabled: false,
