@@ -41,6 +41,9 @@ dependencies:
   marker_icon: ^0.7.1
   geocoding: ^2.0.4
   http: ^0.13.4
+  ndialog: ^4.1.1
+  flutter_polyline_points: ^1.0.0
+  google_polyline_algorithm: ^3.1.0
 
 
 dev_dependencies:
