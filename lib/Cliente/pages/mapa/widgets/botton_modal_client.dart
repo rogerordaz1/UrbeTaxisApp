@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urbe_taxis/Cliente/pages/mapa/widgets/mapa_client_controller.dart';
 
 class BottonModalShet extends StatelessWidget {
   const BottonModalShet({
@@ -114,22 +115,32 @@ class SelecionarTipoTaxi extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        children: [
-          Container(
-              height: 100,
-              width: 100,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-              ),
-              child: Image(image: AssetImage(imagen!))),
-          const SizedBox(height: 10),
-          Text(texto,
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-        ],
+      child: GestureDetector(
+        child: Column(
+          children: [
+            Container(
+                height: 100,
+                width: 100,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                child: Image(image: AssetImage(imagen!))),
+            const SizedBox(height: 10),
+            Text(texto,
+                style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white)),
+          ],
+        ),
+        onTap: () {
+          MapaClientController controller = Get.put(MapaClientController());
+          controller.isConfirmar.value = true;
+          controller.isMarcador.value = true;
+          controller.isConfirmar.value = true;
+          controller.showModalTravelConfirm.value = false;
+          // controller.showModal.value = true;
+        },
       ),
     );
   }

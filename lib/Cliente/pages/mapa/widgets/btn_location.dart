@@ -15,10 +15,7 @@ class BtnCurrentLocation extends StatelessWidget {
         maxRadius: 25,
         child: IconButton(
             icon: const Icon(Icons.my_location_outlined, color: Colors.black),
-            onPressed: () {
-              controller.isMarcador.value = true;
-              controller.isConfirmar.value = true;
-            }),
+            onPressed: () {}),
       ),
     );
   }

@@ -13,6 +13,7 @@ import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
 class MapaClientController extends GetxController {
   var markerlist = <Marker>[].obs;
   Rx<BitmapDescriptor?> icono = Rx<BitmapDescriptor?>(null);
+  Rx<BitmapDescriptor?> icono1 = Rx<BitmapDescriptor?>(null);
   Rx<Position?> position = Rx<Position?>(null);
   Rx<LatLng?> markercoords = Rx<LatLng?>(null);
   Rx<StreamSubscription<Position>?> positionStream =
@@ -25,10 +26,13 @@ class MapaClientController extends GetxController {
   var isMarcador = false.obs;
   var isConfirmar = false.obs;
   var isRepintMapa = false.obs;
+  var showModal = false.obs;
+  var showModalTravelConfirm = true.obs;
 
   @override
   void onInit() async {
     icono.value = await convertIconFromAsset("assets/taxi.png");
+    icono1.value = await convertIconFromAsset("assets/iconlocation.png");
     await Geolocator.requestPermission();
 
     position.value = await Geolocator.getCurrentPosition();
@@ -77,6 +81,8 @@ class MapaClientController extends GetxController {
 
       print('${polyli![0].color}');
 
+      addMarkerToMap(latLongList.last, "2");
+
       isRepintMapa.value = true;
     } else {
       print(response.reasonPhrase);
@@ -92,14 +98,14 @@ class MapaClientController extends GetxController {
       Marker(
         markerId: MarkerId(id),
         position: latLng,
-        icon: icono.value!,
+        icon: icono1.value!,
         infoWindow:
             const InfoWindow(title: "Taxi", snippet: "Chofe pare el Taxi"),
         draggable: false,
         zIndex: 2,
         flat: true,
         anchor: const Offset(0.5, 0.5),
-        rotation: position.value!.heading,
+        // rotation: position.value!.heading,
       ),
     );
   }
@@ -143,7 +149,7 @@ class MapaClientController extends GetxController {
         ),
       ).listen((Position position) {
         this.position.value = position;
-        addMarkerToMap(LatLng(position.latitude, position.longitude), "1");
+        //  addMarkerToMap(LatLng(position.latitude, position.longitude), "1");
       });
     } on Exception catch (e) {
       print(e);
