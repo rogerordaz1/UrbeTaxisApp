@@ -20,7 +20,7 @@ class MapaClientController extends GetxController {
 
   var points = <LatLng>[].obs;
 
-  List<Polyline>? polyline = <Polyline>[].obs;
+  List<Polyline>? polyli = <Polyline>[].obs;
 
   var isMarcador = false.obs;
   var isConfirmar = false.obs;
@@ -37,13 +37,6 @@ class MapaClientController extends GetxController {
 
     checkGps();
     updateLocation();
-
-    polyline![0] = Polyline(
-      polylineId: const PolylineId('1'),
-      color: Colors.black,
-      width: 3,
-      points: points.value,
-    );
 
     super.onInit();
   }
@@ -74,6 +67,15 @@ class MapaClientController extends GetxController {
           .toList();
 
       points.value = latLongList;
+
+      polyli!.add(Polyline(
+        polylineId: const PolylineId('1'),
+        color: Colors.black,
+        width: 3,
+        points: points.value,
+      ));
+
+      print('${polyli![0].color}');
 
       isRepintMapa.value = true;
     } else {

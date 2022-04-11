@@ -31,7 +31,7 @@ class MapaClientPage extends StatelessWidget {
                     zoom: 16,
                   ),
 
-                  polylines: controller.polyline!.toSet(),
+                  polylines: controller.polyli!.toSet(),
                   // markers: Set<Marker>.of(controller.markerlist.value),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
