@@ -21,21 +21,22 @@ class MapaClientPage extends StatelessWidget {
       body: Stack(
         children: [
           (controller.isRepintMapa.value == true)
-              ? GoogleMap(
-                  onCameraMove: (qwe) {
-                    controller.markercoords.value = qwe.target;
-                  },
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: const CameraPosition(
-                    target: LatLng(22.42259, -83.69854),
-                    zoom: 16,
-                  ),
-
-                  polylines: controller.polyline!.toSet(),
-                  // markers: Set<Marker>.of(controller.markerlist.value),
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                )
+              ? Obx(() {
+                  return GoogleMap(
+                    onCameraMove: (qwe) {
+                      controller.markercoords.value = qwe.target;
+                    },
+                    zoomControlsEnabled: false,
+                    initialCameraPosition: const CameraPosition(
+                      target: LatLng(22.42259, -83.69854),
+                      zoom: 16,
+                    ),
+                    polylines: controller.polyli!.toSet(),
+                    markers: Set<Marker>.of(controller.markerlist.value),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                  );
+                })
               : GoogleMap(
                   onCameraMove: (qwe) {
                     controller.markercoords.value = qwe.target;
@@ -66,7 +67,20 @@ class MapaClientPage extends StatelessWidget {
               return Container();
             }
           }),
-          const BottonModalShet(),
+          Obx(() {
+            if (controller.showModalTravelConfirm.value == true) {
+              return const BottonModalShet();
+            } else {
+              return Container();
+            }
+          }),
+          Obx(() {
+            if (controller.showModal.value == true) {
+              return const TravelPanel();
+            } else {
+              return Container();
+            }
+          })
         ],
       ),
       floatingActionButton: const BtnCurrentLocation(),
@@ -74,6 +88,83 @@ class MapaClientPage extends StatelessWidget {
 
       // BtnToggleUserRoute(),
       // BtnFollowUser(),
+    );
+  }
+}
+
+class TravelPanel extends StatelessWidget {
+  const TravelPanel({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: Get.height * 0.7),
+      child: Container(
+        height: Get.height * 0.3,
+        width: Get.width,
+        decoration: const BoxDecoration(
+            color: Color(0xFFf8ac00),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(50), topRight: Radius.circular(50))),
+        child: Column(children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const FilaDetalles(),
+          const SizedBox(
+            height: 10,
+          ),
+          const FilaDetalles(),
+          const SizedBox(
+            height: 10,
+          ),
+          const FilaDetalles(),
+          const SizedBox(
+            height: 10,
+          ),
+          MaterialButton(
+              height: 40, minWidth: 200, color: Colors.blue, onPressed: () {})
+        ]),
+      ),
+    );
+  }
+}
+
+class FilaDetalles extends StatelessWidget {
+  const FilaDetalles({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          width: 20,
+        ),
+        const Icon(
+          Icons.car_rental,
+          size: 40,
+        ),
+        Row(
+          children: const [
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              'Tipo de taxi :',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              ' Económico',
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -96,12 +187,6 @@ class ConfirmarButton extends StatelessWidget {
         onPressed: () async {
           controller.isMarcador.value = false;
 
-          print(controller.position.value!.longitude);
-          print(controller.position.value!.latitude);
-
-          print(controller.markercoords.value!.latitude);
-          print(controller.markercoords.value!.longitude);
-
           await controller.getRutas(
               fromlat: controller.position.value!.latitude,
               fromlong: controller.position.value!.longitude,
@@ -121,6 +206,7 @@ class ConfirmarButton extends StatelessWidget {
           await Future.delayed(const Duration(seconds: 5));
 
           progressDialog.dismiss();
+          controller.showModal.value = true;
         },
         child: const Text("Confirmar Ruta"),
       ),
