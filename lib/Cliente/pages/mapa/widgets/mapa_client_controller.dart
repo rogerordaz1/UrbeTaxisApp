@@ -21,7 +21,7 @@ class MapaClientController extends GetxController {
 
   var points = <LatLng>[].obs;
 
-  List<Polyline>? polyli = <Polyline>[].obs;
+  var polyli = <Polyline>[].obs;
 
   var isMarcador = false.obs;
   var isConfirmar = false.obs;
@@ -72,14 +72,14 @@ class MapaClientController extends GetxController {
 
       points.value = latLongList;
 
-      polyli!.add(Polyline(
+      polyli.add(Polyline(
         polylineId: const PolylineId('1'),
         color: Colors.black,
         width: 3,
         points: points.value,
       ));
 
-      print('${polyli![0].color}');
+      print('${polyli[0].color}');
 
       addMarkerToMap(latLongList.last, "2");
 

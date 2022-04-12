@@ -18,11 +18,26 @@ class MapaClientPage extends StatelessWidget {
 
     return Scaffold(
       drawer: const CustomDrawer(),
-      body: Stack(
-        children: [
-          (controller.isRepintMapa.value == true)
-              ? Obx(() {
-                  return GoogleMap(
+      body: Obx(
+        () => Stack(
+          children: [
+            (controller.isRepintMapa.value == true)
+                ? Obx(() {
+                    return GoogleMap(
+                        onCameraMove: (qwe) {
+                          controller.markercoords.value = qwe.target;
+                        },
+                        zoomControlsEnabled: false,
+                        initialCameraPosition: const CameraPosition(
+                          target: LatLng(22.42259, -83.69854),
+                          zoom: 16,
+                        ),
+                        polylines: controller.polyli.value.toSet(),
+                        markers: Set<Marker>.of(controller.markerlist.value),
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true);
+                  })
+                : GoogleMap(
                     onCameraMove: (qwe) {
                       controller.markercoords.value = qwe.target;
                     },
@@ -31,61 +46,46 @@ class MapaClientPage extends StatelessWidget {
                       target: LatLng(22.42259, -83.69854),
                       zoom: 16,
                     ),
-                    polylines: controller.polyli!.toSet(),
-                    markers: Set<Marker>.of(controller.markerlist.value),
+
+                    // markers: Set<Marker>.of(controller.markerlist.value),
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
-                  );
-                })
-              : GoogleMap(
-                  onCameraMove: (qwe) {
-                    controller.markercoords.value = qwe.target;
-                  },
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: const CameraPosition(
-                    target: LatLng(22.42259, -83.69854),
-                    zoom: 16,
                   ),
-
-                  // markers: Set<Marker>.of(controller.markerlist.value),
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: true,
-                ),
-          const SearchBar(),
-          Obx(() {
-            if (controller.isMarcador.value == true) {
-              return const Align(
-                  alignment: Alignment.center, child: IconSelectMyLocation());
-            } else {
-              return Container();
-            }
-          }),
-          Obx(() {
-            if (controller.isConfirmar.value == true) {
-              return const ConfirmarButton();
-            } else {
-              return Container();
-            }
-          }),
-          Obx(() {
-            if (controller.showModalTravelConfirm.value == true) {
-              return const BottonModalShet();
-            } else {
-              return Container();
-            }
-          }),
-          Obx(() {
-            if (controller.showModal.value == true) {
-              return const TravelPanel();
-            } else {
-              return Container();
-            }
-          })
-        ],
+            const SearchBar(),
+            Obx(() {
+              if (controller.isMarcador.value == true) {
+                return const Align(
+                    alignment: Alignment.center, child: IconSelectMyLocation());
+              } else {
+                return Container();
+              }
+            }),
+            Obx(() {
+              if (controller.isConfirmar.value == true) {
+                return const ConfirmarButton();
+              } else {
+                return Container();
+              }
+            }),
+            Obx(() {
+              if (controller.showModalTravelConfirm.value == true) {
+                return const BottonModalShet();
+              } else {
+                return Container();
+              }
+            }),
+            Obx(() {
+              if (controller.showModal.value == true) {
+                return const TravelPanel();
+              } else {
+                return Container();
+              }
+            })
+          ],
+        ),
       ),
       floatingActionButton: const BtnCurrentLocation(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-
       // BtnToggleUserRoute(),
       // BtnFollowUser(),
     );
